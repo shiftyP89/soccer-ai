@@ -1,0 +1,9 @@
+<div>
+    <ul>
+        <li *ngFor="let secondaryAxisRow of soccerField.field">
+            <ng-container *ngFor="let cell of secondaryAxisRow">
+                [<span *ngIf="cell.content">o</span>]
+            </ng-container>
+        </li>
+    </ul>
+</div>
