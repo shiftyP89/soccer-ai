@@ -39,6 +39,9 @@ export class SoccerFieldService {
     private LENGTH: number = 100;
     private WITDH: number = 60;
 
+    public primaryBallIndex: number;
+    public secondaryBallIndex: number;
+
     constructor() { 
     }
 

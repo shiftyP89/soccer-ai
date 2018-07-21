@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { SoccerFieldCell, GrassStatus, Content } from '../../soccer-field.service';
+import { SoccerFieldCell, GrassStatus, Content } from '../../services/soccer-field/soccer-field.service';
 
 @Component({
     selector: 'soccer-field-cell',

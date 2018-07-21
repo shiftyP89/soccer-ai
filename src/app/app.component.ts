@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SoccerFieldService, SoccerField, GrassStatus } from './soccer-field.service';
+import { SoccerFieldService, SoccerField, GrassStatus } from './services/soccer-field/soccer-field.service';
 
 @Component({
     selector: 'app-root',
@@ -9,6 +9,7 @@ import { SoccerFieldService, SoccerField, GrassStatus } from './soccer-field.ser
 export class AppComponent {
     
     public soccerField: SoccerField;
+    public workerThread: Worker;
 
     constructor(private soccerFieldService: SoccerFieldService){
 
@@ -18,6 +19,6 @@ export class AppComponent {
         const grassInitialStatus: GrassStatus = 'Default';
         this.soccerFieldService.buildInitialSoccerField(grassInitialStatus);
         this.soccerField = this.soccerFieldService.getSoccerField();
-    }
 
+    }
 }

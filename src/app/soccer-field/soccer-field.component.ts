@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { SoccerFieldService, SoccerField } from '../soccer-field.service';
+import { SoccerFieldService, SoccerField } from '../services/soccer-field/soccer-field.service';
 
 @Component({
     selector: 'soccer-field',
