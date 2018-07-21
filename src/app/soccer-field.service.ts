@@ -17,6 +17,7 @@ export type Content = {
     type: 'Ball' | 'Player',
     info?: PlayerInfo,
     attributes?: PlayerAttributes,
+    team?: 'H' | 'A'
 };
 
 export type PlayerAttributes = {
@@ -35,7 +36,7 @@ export type PlayerInfo = {
 export class SoccerFieldService {
 
     private soccerField: SoccerField;
-    private LENGTH: number = 90;
+    private LENGTH: number = 100;
     private WITDH: number = 60;
 
     constructor() { 
@@ -47,9 +48,9 @@ export class SoccerFieldService {
      */
     public buildInitialSoccerField(initalGrassStatus: GrassStatus, lenght: number = this.LENGTH, witdh: number = this.WITDH){
         const primaryAxis: SoccerFieldCell[][] = [];
-        for(let i = 0; i < lenght; ++i) {
+        for(let i = 0; i < witdh; ++i) {
             const currentSecondayAxis: SoccerFieldCell[] = [];
-            for(let j = 0; j < witdh; ++j){
+            for(let j = 0; j < lenght; ++j){
                 const currentFieldCell: SoccerFieldCell = {
                     id: i+':'+j,
                     grassStatus: initalGrassStatus,
@@ -65,8 +66,16 @@ export class SoccerFieldService {
             grassGeneralStatus: initalGrassStatus,
         }
 
-        this.soccerField.field[lenght/2][witdh/2].content = {
+        this.soccerField.field[witdh/2][lenght/2].content = {
             type: 'Ball',
+        };
+        this.soccerField.field[30][25].content = {
+            type: 'Player',
+            team: 'H',
+        };
+        this.soccerField.field[30][75].content = {
+            type: 'Player',
+            team: 'A',
         };
     }
 

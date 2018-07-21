@@ -1,0 +1,12 @@
+.cell {
+    width: 10px;
+    height: 10px;
+    overflow: hidden;
+    line-height: 9px;
+    font-size: 15px;
+    .ball {
+        width: 100%;
+        height: 100%;
+        background: white !important;
+    }
+}

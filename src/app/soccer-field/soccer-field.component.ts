@@ -2,9 +2,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { SoccerFieldService, SoccerField } from '../soccer-field.service';
 
 @Component({
-    selector: 'app-soccer-field',
+    selector: 'soccer-field',
     templateUrl: './soccer-field.component.html',
-    styleUrls: ['./soccer-field.component.css']
+    styleUrls: ['./soccer-field.component.scss']
 })
 export class SoccerFieldComponent implements OnInit {
 

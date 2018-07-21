@@ -1,0 +1,29 @@
+.field{
+    display: flex;
+    flex-direction: column;
+    background: green;
+    width: 1000px;
+    height: 600px;
+    border: 4px solid white;
+    .field-row{
+        display: flex;
+        flex-direction: row;
+        soccer-field-cell{ 
+            &:nth-child(10n+1){
+                background: darkgreen;
+            }
+            &:nth-child(10n+2){
+                background: darkgreen;
+            }
+            &:nth-child(10n+3){
+                background: darkgreen;
+            }
+            &:nth-child(10n+4){
+                background: darkgreen;
+            }
+            &:nth-child(10n+5){
+                background: darkgreen;
+            }
+        }
+    }
+}
