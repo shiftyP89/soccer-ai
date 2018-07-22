@@ -1,4 +1,4 @@
 <div class="container">
-  <soccer-field *ngIf="soccerField"  [soccerField]="soccerField"></soccer-field>
+  <soccer-field *ngIf="soccerField" [changesStreamObs]="soccerFieldService.changesStream$"  [soccerField]="soccerField"></soccer-field>
 </div>
 

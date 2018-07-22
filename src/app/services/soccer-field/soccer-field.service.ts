@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from '../../../../node_modules/rxjs';
 
 export type SoccerField = {
     field: SoccerFieldCell[][],
@@ -30,17 +31,23 @@ export type PlayerInfo = {
     name: string,
 };
 
+export type BallPosition = {
+    primary: number,
+    secondary: number,
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class SoccerFieldService {
 
     private soccerField: SoccerField;
-    private LENGTH: number = 100;
-    private WITDH: number = 60;
+    private primaryAxisLength: number = 60; // WIDTH
+    private secondaryAxisLength: number = 100; // LENGTH
 
-    public primaryBallIndex: number;
-    public secondaryBallIndex: number;
+    private ballPosition: BallPosition;
+
+    public changesStream$: BehaviorSubject<SoccerField> = new BehaviorSubject<SoccerField>(this.soccerField);
 
     constructor() { 
     }
@@ -49,9 +56,9 @@ export class SoccerFieldService {
      * Inicializa el terreno de juego
      * @param initalGrassStatus 
      */
-    public buildInitialSoccerField(initalGrassStatus: GrassStatus, lenght: number = this.LENGTH, witdh: number = this.WITDH){
+    public buildInitialSoccerField(initalGrassStatus: GrassStatus, lenght: number = this.secondaryAxisLength, width: number = this.primaryAxisLength){
         const primaryAxis: SoccerFieldCell[][] = [];
-        for(let i = 0; i < witdh; ++i) {
+        for(let i = 0; i < width; ++i) {
             const currentSecondayAxis: SoccerFieldCell[] = [];
             for(let j = 0; j < lenght; ++j){
                 const currentFieldCell: SoccerFieldCell = {
@@ -69,7 +76,7 @@ export class SoccerFieldService {
             grassGeneralStatus: initalGrassStatus,
         }
 
-        this.soccerField.field[witdh/2][lenght/2].content = {
+        this.soccerField.field[width/2][lenght/2].content = {
             type: 'Ball',
         };
         this.soccerField.field[30][25].content = {
@@ -80,6 +87,89 @@ export class SoccerFieldService {
             type: 'Player',
             team: 'A',
         };
+
+        this.ballPosition = {
+            primary: width/2,
+            secondary: lenght/2,
+        }
+
+        this.primaryAxisLength = width;
+        this.secondaryAxisLength = lenght;
+    }
+
+    /**
+     * Moves the ball speedX positions in every axis.
+     * @param dirP 
+     * @param dirS 
+     * @param speedP 
+     * @param speedS 
+     */
+    public moveBall(dirP: 1 | -1, dirS: 1 | -1, speedP, speedS) {
+        console.log('Moving ball: ', dirP*speedP, dirS*speedS);
+        
+        if(speedP > 0 || speedS > 0) {
+            // Remove it from its current position
+            const currentBallCell = this.soccerField.field[this.ballPosition.primary][this.ballPosition.secondary];
+            if(Array.isArray(currentBallCell.content)) {
+                for(const contentIdx in currentBallCell.content) {
+                    if(currentBallCell.content[contentIdx].type === 'Ball') delete currentBallCell.content[contentIdx];
+                }
+            }
+            else {
+                currentBallCell.content = null;
+            }
+
+            // And move it to its new position
+            this.ballPosition.primary += speedP*dirP;
+            if(this.ballPosition.primary >= this.primaryAxisLength) {
+                console.log('Ball out of bounds!');
+                this.resetBallPosition();
+            }
+            else {
+                this.ballPosition.secondary += speedS*dirS;
+                if(this.ballPosition.secondary >= this.secondaryAxisLength) {
+                    console.log('Ball out of bounds!');
+                    this.resetBallPosition();
+                }
+                else {
+                    this.moveBallToCell(this.ballPosition.primary, this.ballPosition.secondary);
+                }
+            }
+        }
+        console.log('New ball position', this.ballPosition);
+    }
+
+    /**
+     * Resets ball position to center of the field
+     */
+    private resetBallPosition() {
+        this.ballPosition.primary = this.primaryAxisLength/2;
+        this.ballPosition.secondary = this.secondaryAxisLength/2;
+
+        this.moveBallToCell(this.ballPosition.primary, this.ballPosition.secondary);
+    }
+
+    /**
+     * Moves the ball to a certain given cell coordinates. Cell coordinates must be valid.
+     * @param primary 
+     * @param secondary 
+     */
+    private moveBallToCell(primary, secondary){
+        const newBallCell = this.soccerField.field[primary][secondary];
+        if(Array.isArray(newBallCell.content)) {
+            newBallCell.content.push({
+                type: 'Ball',
+            })
+        }
+        else {
+            newBallCell.content = {
+                type: 'Ball',
+            };
+        }
+    }
+
+    public triggerOnChangeListener(){
+        this.changesStream$.next(this.soccerField);
     }
 
     public getSoccerField(): SoccerField {
