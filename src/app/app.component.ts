@@ -6,25 +6,19 @@ import { CoreWorkerService } from './services/core-worker/core-worker.service';
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
     
     public soccerField: SoccerField;
-    public workerThread: Worker;
 
     constructor(public soccerFieldService: SoccerFieldService,
-                private coreWorkerService: CoreWorkerService,
-                private ref: ChangeDetectorRef){}
+                private coreWorkerService: CoreWorkerService
+            ){}
 
     ngOnInit(){
         const grassInitialStatus: GrassStatus = 'Default';
         this.soccerFieldService.buildInitialSoccerField(grassInitialStatus);
         this.soccerField = this.soccerFieldService.getSoccerField();
-
-        this.soccerFieldService.changesStream$.subscribe(() => {
-            this.ref.markForCheck();
-        });
 
         this.coreWorkerService.simulateBallMovement();
     }

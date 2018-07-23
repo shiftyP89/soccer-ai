@@ -6,7 +6,7 @@ import { SoccerFieldService } from '../soccer-field/soccer-field.service';
 })
 export class CoreWorkerService {
 
-    private secondsPerHalf: number = 5;
+    private secondsPerHalf: number = 5; //45*60
 
     constructor(private soccerFieldService: SoccerFieldService) { }
 

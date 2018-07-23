@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from '../../../../node_modules/rxjs';
+import * as _ from 'lodash';
 
 export type SoccerField = {
     field: SoccerFieldCell[][],
@@ -47,7 +48,7 @@ export class SoccerFieldService {
 
     private ballPosition: BallPosition;
 
-    public changesStream$: BehaviorSubject<SoccerField> = new BehaviorSubject<SoccerField>(this.soccerField);
+    public soccerFieldStream$: BehaviorSubject<SoccerField>;
 
     constructor() { 
     }
@@ -95,6 +96,8 @@ export class SoccerFieldService {
 
         this.primaryAxisLength = width;
         this.secondaryAxisLength = lenght;
+
+        this.soccerFieldStream$ = new BehaviorSubject<SoccerField>(this.soccerField);
     }
 
     /**
@@ -169,7 +172,8 @@ export class SoccerFieldService {
     }
 
     public triggerOnChangeListener(){
-        this.changesStream$.next(this.soccerField);
+        
+        this.soccerFieldStream$.next(this.soccerField);
     }
 
     public getSoccerField(): SoccerField {
