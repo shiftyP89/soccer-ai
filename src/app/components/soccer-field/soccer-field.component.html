@@ -1,4 +1,4 @@
-<div class="field">
+<div class="field" *ngIf="soccerFieldStream$">
     <div class="field-row" *ngFor="let secondaryAxisRow of (soccerFieldStream$ | async)?.field; trackBy: trackRow">
         <ng-container *ngFor="let cell of secondaryAxisRow; trackBy: trackCell">
             <soccer-field-cell [id]="cell.id" [grassStatus]="cell.grassStatus" [content]="cell.content"></soccer-field-cell>

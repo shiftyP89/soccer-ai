@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, OnInit, Input, OnChanges} from '@angular/core';
 import { SoccerFieldCell, GrassStatus, Content } from '../../../services/soccer-field/soccer-field.service';
 
 @Component({
@@ -6,12 +6,12 @@ import { SoccerFieldCell, GrassStatus, Content } from '../../../services/soccer-
     templateUrl: './soccer-field-cell.component.html',
     styleUrls: ['./soccer-field-cell.component.scss']
 })
-export class SoccerFieldCellComponent implements OnInit {
+export class SoccerFieldCellComponent implements OnInit, OnChanges {
 
     @Input() public grassStatus: GrassStatus;
     @Input() public id: string;
     @Input() public content: Content | Content[];
-    
+
     public fieldCell: SoccerFieldCell;
     public containsP1: boolean = false;
     public containsP2: boolean = false;
@@ -23,12 +23,20 @@ export class SoccerFieldCellComponent implements OnInit {
     constructor() {
      }
 
-    ngOnInit() {
+     ngOnInit(){
+
+     }
+
+    ngOnChanges() {
+        this.containsBall = this.containsP1 = this.containsP2 = false;
+
         this.fieldCell = {
             id: this.id,
             grassStatus: this.grassStatus,
             content: this.content,
         }
+
+        console.log(`Contenido ${this.id} --> `, JSON.stringify(this.content));
 
         if(this.fieldCell.content) {
             if(Array.isArray(this.fieldCell.content)){
@@ -36,8 +44,8 @@ export class SoccerFieldCellComponent implements OnInit {
                     if(content.type === 'Ball') this.containsBall = true;
                     else if(!this.containsP1) {
                         this.containsP1 = true;
-                        this.p1 = content; 
-                    } 
+                        this.p1 = content;
+                    }
                     else {
                         this.containsP2 = true;
                         this.p2 = content;
@@ -49,7 +57,7 @@ export class SoccerFieldCellComponent implements OnInit {
                 else {
                     this.containsP1 = true;
                     this.p1 = this.fieldCell.content;
-                } 
+                }
             }
         }
     }
